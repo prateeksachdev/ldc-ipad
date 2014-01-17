@@ -1,0 +1,857 @@
+//
+//  HomeView.m
+//  LeadersOfDesignCouncil
+//
+//  Created by Mobikasa_Jan2013 on 21/01/13.
+//  Copyright (c) 2013 Mobikasa_Jan2013. All rights reserved.
+//
+
+#import "HomeViewController.h"
+#import "Constants.h"
+#import "Social/Social.h"
+#import "EventListView.h"
+#import "LDCFavoritesView.h"
+#import <MessageUI/MessageUI.h>
+#import "FavoriteView.h"
+#import "InAppBrowser.h"
+#import "CoreDataOprations.h"
+#import "AppDelegate.h"
+
+@interface HomeViewController ()<MFMailComposeViewControllerDelegate>
+
+@end
+
+@implementation HomeViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+
+    
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+
+    homeButton.titleLabel.font=[UIFont fontWithName:FontLight size:20];
+    membersButton.titleLabel.font=[UIFont fontWithName:FontLight size:20];
+    eventsButton.titleLabel.font=[UIFont fontWithName:FontLight size:20];
+    ldcFavoritesButton.titleLabel.font=[UIFont fontWithName:FontLight size:20];
+
+    [homeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [membersButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [eventsButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+
+    
+    homeViewObj=[[HomeView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    [homeViewObj setHomeView];
+    [homeViewObj setDelegate:self];
+    [homeViewObj setSelectorToBringToolBarInFront:@selector(bringToolBarToFront:)];
+    [homeViewObj setSelectorToHideUnhideToolBarView:@selector(hideUnhideToolBarView:)];
+    [self.view addSubview:homeViewObj];
+    
+    toolBarView.frame=CGRectMake(0, 663, 1024, 85);
+    
+    [self.view addSubview:toolBarView];
+    bottomViewBackground = [[UIView alloc] initWithFrame:bottomViewFrameInvisibleMode];
+    bottomViewBackground.backgroundColor = [UIColor blackColor];
+    bottomViewBackground.alpha = 1;
+    [self.view addSubview:bottomViewBackground];
+}
+-(void)bringToolBarToFront:(HomeView *)homeObj{
+  
+    [homeViewObj bringSubviewToFront:toolBarView];
+    
+}
+-(IBAction)setttingButtonAction:(id)sender{
+   
+//    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [lhomeselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [sponsorsselectedImageView setImage:[UIImage imageNamed:@""]];
+//    [settingselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    
+//    [homeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [membersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [eventsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [ldcFavoritesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
+    if (!settingViewObj) {
+    settingViewObj=[[SettingsView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+        [settingViewObj setDelegate:self];
+        [settingViewObj setLogoutAction:@selector(logoutAction)];
+    }
+    [self.view addSubview:settingViewObj];
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch* touch = ([touches count] == 1 ? [touches anyObject] : nil);
+    
+    if (touch.view==settingViewObj.settingBackgroundVIew)
+    {
+        [settingViewObj removeFromSuperview];
+    }
+}
+
+-(void)logoutAction{
+    [[self navigationController]popToRootViewControllerAnimated:YES];
+}
+-(void)twitterButtonAction:(NSString *)str{
+    SLComposeViewController *twController=[SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+    {
+        SLComposeViewControllerCompletionHandler __block completionHandler=^(SLComposeViewControllerResult result){
+            
+            [twController dismissViewControllerAnimated:YES completion:nil];
+            
+            switch(result){
+                case SLComposeViewControllerResultCancelled:
+                default:
+                {
+                    NSLog(@"Cancelled.....");
+                    
+                }
+                    break;
+                case SLComposeViewControllerResultDone:
+                {
+                    NSLog(@"Posted....");
+                }
+                    break;
+            }};
+        
+        [twController setInitialText:@"Check out this article."];
+        [twController addURL:[NSURL URLWithString:@"http://www.mocha.co/"]];
+        [twController setCompletionHandler:completionHandler];
+        [self presentViewController:twController animated:YES completion:nil];
+    }
+
+}
+-(void)facebookAction:(NSString *)str{
+    SLComposeViewController *fbController=[SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+    if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook])
+    {
+        SLComposeViewControllerCompletionHandler __block completionHandler=^(SLComposeViewControllerResult result){
+            
+            [fbController dismissViewControllerAnimated:YES completion:nil];
+            
+            switch(result){
+                case SLComposeViewControllerResultCancelled:
+                default:
+                {
+                    NSLog(@"Cancelled.....");
+                    
+                }
+                    break;
+                case SLComposeViewControllerResultDone:
+                {
+                    NSLog(@"Posted....");
+                }
+                    break;
+            }};
+        [fbController setInitialText:@"Check out this article."];
+        [fbController addURL:[NSURL URLWithString:@"http://www.mocha.co/"]];
+        [fbController setCompletionHandler:completionHandler];
+        [self presentViewController:fbController animated:YES completion:nil];
+    }
+
+}
+-(void)hideUnhideToolBarView:(NSString *)hideToolBarView{
+    if ([hideToolBarView isEqualToString:@"True"]) {
+        [self hideToolBarView];
+    }
+    else{
+        [self showToolBarView];
+    }
+}
+-(IBAction)aboutLdcButtonAction:(id)sender{
+    
+    [homeButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [membersButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [eventsButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    
+    
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@""]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+    
+    
+    if (!aboutLdcViewObj) {
+        aboutLdcViewObj=[[AboutLDCView alloc]initWithFrame:CGRectMake(0,0, 1024, 748)];
+        [aboutLdcViewObj setDelegate:self];
+        [aboutLdcViewObj setSelectorFaceBookAction:@selector(facebookAction:)];
+        [aboutLdcViewObj setSelectorTwitterAction:@selector(twitterButtonAction:)];
+        [aboutLdcViewObj setSelectorToHideUnhideToolBarView:@selector(hideUnhideToolBarView:)];
+    }
+    aboutLdcViewObj.userInteractionEnabled=YES;
+    toolBarView.frame=CGRectMake(0, 663, 1024, 85);
+    bottomViewBackground.frame = bottomViewFrameInvisibleMode;
+    
+    [aboutLdcViewObj removeFromSuperview];
+    [homeViewObj removeFromSuperview];
+    [memberCatalogViewObj removeFromSuperview];
+    [memberBioViewObj removeFromSuperview];
+    [memberBioViewListObj removeFromSuperview];
+    [eventViewObj removeFromSuperview];
+    [eventMainViewObj removeFromSuperview];
+    [eventListViewObj removeFromSuperview];
+    [ldcFavoritesViewObj removeFromSuperview];
+    [settingViewObj removeFromSuperview];
+    [self.view addSubview:aboutLdcViewObj];
+    [self.view addSubview:toolBarView];
+    
+    [self fadeView:aboutLdcViewObj fadein:YES timeAnimation:0.3];
+}
+
+-(IBAction)homeButtonAction:(id)sender{
+    
+    [homeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [membersButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [eventsButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+
+    
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+
+    
+    //if (!homeViewObj)
+    {
+        homeViewObj=[[HomeView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    }
+    homeViewObj.userInteractionEnabled=YES;
+    
+    
+    toolBarView.frame=CGRectMake(0, 663, 1024, 85);
+    
+    [homeViewObj removeAddedViews];
+    [aboutLdcViewObj removeFromSuperview];
+    [homeViewObj removeFromSuperview];
+    [memberCatalogViewObj removeFromSuperview];
+    [memberBioViewObj removeFromSuperview];
+    [memberBioViewListObj removeFromSuperview];
+    [eventViewObj removeFromSuperview];
+    [eventMainViewObj removeFromSuperview];
+    [eventListViewObj removeFromSuperview];
+    [ldcFavoritesViewObj removeFromSuperview];
+    [settingViewObj removeFromSuperview];
+    [homeViewObj setHomeView];
+    [self.view addSubview:homeViewObj];
+    [self.view addSubview:toolBarView];
+
+    [self fadeView:homeViewObj fadein:YES timeAnimation:0.3];
+    
+}
+-(IBAction)membersButtonAction:(id)sender{
+  
+    [homeButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [membersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [eventsButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+
+    
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@""]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+
+    
+    // Changes made by sanat
+    
+    if (!memberCatalogViewObj) {
+        memberCatalogViewObj=[[MemberCatalogRegisterView alloc]initWithFrame:CGRectMake(0,311, 1024, 437)];
+        memberCatalogViewObj.delegate=self;
+        [memberCatalogViewObj setSelectorMemberCatalogAction:@selector(memberCatalogRegisterViewFrame:)];
+        [memberCatalogViewObj setSelectorMemberCatalogDetailAction:@selector(memberDetailButtonAction:)];
+
+    }
+    homeViewObj.userInteractionEnabled=NO;
+    aboutLdcViewObj.userInteractionEnabled=NO;
+
+//    [homeViewObj removeFromSuperview];
+//    [settingViewObj removeFromSuperview];
+      [eventListViewObj removeFromSuperview];
+//      [eventMainViewObj removeFromSuperview];
+      [ldcFavoritesViewObj removeFromSuperview];
+//      [eventMainViewObj removeFromSuperview];
+//    [aboutLdcViewObj removeFromSuperview];
+     // [memberBioViewObj removeFromSuperview];
+
+    memberCatalogViewObj.frame=CGRectMake(0,311, 1024, 437);
+    [self.view addSubview:bottomViewBackground];
+    [self.view addSubview:memberCatalogViewObj];
+  
+    if (toolBarView.center.y==269.500000) {
+//        memberCatalogViewObj.frame=CGRectMake(0,748, 1024, 437);
+//        [UIView beginAnimations:nil context:nil];
+//        [UIView setAnimationDuration:0.3];
+//        
+//        [UIView setAnimationDelegate:self];
+//        
+//        //   memberCatalogViewObj.alpha=0;
+//        memberCatalogViewObj.frame=CGRectMake(0,311, 1024, 437);
+//        memberCatalogViewObj.alpha = 1;
+//        
+//        [UIView commitAnimations];
+        
+        
+    [self fadeView:memberCatalogViewObj fadein:YES timeAnimation:0.3];
+    }
+    else {
+        
+        // toolBarView.alpha=0;
+            //added by Umesh to set the background of member view,so that on transition home view should not be visible
+        bottomViewBackground.frame = CGRectMake(0,748, 1024, 437);  //
+        
+        memberCatalogViewObj.frame=CGRectMake(0,748, 1024, 437);
+        toolBarView.frame=CGRectMake(0,748,1024, 85);
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        
+        toolBarView.frame=CGRectMake(0, 227, 1024, 85);
+        toolBarView.alpha = 1;
+        
+        [UIView commitAnimations];
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        
+        [UIView setAnimationDelegate:self];
+        
+        //   memberCatalogViewObj.alpha=0;
+        bottomViewBackground.frame = bottomViewFrameVisibleMode;
+        memberCatalogViewObj.frame=CGRectMake(0,311, 1024, 437);
+        memberCatalogViewObj.alpha = 1;
+        
+        [UIView commitAnimations];
+        
+    }
+
+}
+
+-(IBAction)eventButtonAction:(id)sender
+{
+
+    [homeButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [membersButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [eventsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@""]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@""]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+
+
+    if (!eventListViewObj) {
+        eventListViewObj=[[EventListView alloc]initWithFrame:CGRectMake(0, 311, 1024, 437)];
+    }
+    homeViewObj.userInteractionEnabled=NO;
+    aboutLdcViewObj.userInteractionEnabled=NO;
+    eventListViewObj.delegate=self;
+    
+    
+    [eventListViewObj setSelectoreventListAction:@selector(eventDetailButtonAction:)];
+    [eventListViewObj setSelectorEventListSearchAction:@selector(eventViewFrame:)];
+    
+    [eventListViewObj removeFromSuperview];
+
+    [memberCatalogViewObj removeFromSuperview];
+   
+    [ldcFavoritesViewObj removeFromSuperview];
+  [self.view addSubview:bottomViewBackground];
+    [self.view addSubview:eventListViewObj];
+
+    if (toolBarView.center.y==269.500000) {
+        
+        
+     [self fadeView:eventListViewObj fadein:YES timeAnimation:0.3];
+
+        
+    }
+    else {
+        
+           //added by Umesh to set the background of member view,so that on transition home view should not be visible
+        bottomViewBackground.frame = bottomViewFrameInvisibleMode;  //
+        
+        
+        toolBarView.frame=CGRectMake(0,748, 1024, 85);
+        
+        eventListViewObj.frame=CGRectMake(0, 748, 1024, 437);
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        
+        toolBarView.frame=CGRectMake(0, 227, 1024, 85);
+        toolBarView.alpha = 1;
+        [UIView commitAnimations];
+        
+        //   eventListViewObj.alpha=0.5;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        
+         bottomViewBackground.frame = bottomViewFrameVisibleMode;
+        eventListViewObj.frame=CGRectMake(0, 311, 1024, 437);
+        eventListViewObj.alpha = 1;
+        [UIView commitAnimations];
+        
+        
+    }
+
+}
+
+
+-(IBAction)ldcFavoritesAction:(id)sender
+{
+    [homeButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [membersButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [eventsButton setTitleColor:kGrayColor forState:UIControlStateNormal];
+    [ldcFavoritesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
+    [ledearsOfDesignselectedImageView setImage:[UIImage imageNamed:@""]];
+    [lhomeselectedImageView setImage:[UIImage imageNamed:@""]];
+    [membersselectedImageView setImage:[UIImage imageNamed:@""]];
+    [eventsselectedImageView setImage:[UIImage imageNamed:@""]];
+    [ldcFavoritesselectedImageView setImage:[UIImage imageNamed:@"tab_bar_on_bg.png"]];
+    [settingselectedImageView setImage:[UIImage imageNamed:@""]];
+
+    
+    if (!ldcFavoritesViewObj)
+    {
+        
+        ldcFavoritesViewObj=[[LDCFavoritesView alloc]initWithFrame:CGRectMake(0, 311, 1024, 437)];
+ }
+    homeViewObj.userInteractionEnabled=NO;
+    aboutLdcViewObj.userInteractionEnabled=NO;
+    ldcFavoritesViewObj.delegate=self;
+  
+    [ldcFavoritesViewObj setSelectorFavSearch:@selector(favoriteViewFrame:)];
+    
+    [ldcFavoritesViewObj setSelectorFavDetail:@selector(favoritesDetailButtonAction:)];
+    
+    [memberBioViewObj removeFromSuperview];
+    
+    [eventViewObj removeFromSuperview];
+    
+    [memberCatalogViewObj removeFromSuperview];
+
+    [eventListViewObj removeFromSuperview];
+    
+    [self.view addSubview:bottomViewBackground];
+    [self.view addSubview:ldcFavoritesViewObj];
+    
+    NSLog(@"%f",toolBarView.center.y);
+    
+    if (toolBarView.center.y==269.500000) {
+          [self fadeView:ldcFavoritesViewObj fadein:YES timeAnimation:0.3];
+    }
+    
+    else {
+        
+           //added by Umesh to set the background of member view,so that on transition home view should not be visible
+        bottomViewBackground.frame = bottomViewFrameInvisibleMode;  //
+        
+        
+        toolBarView.frame=CGRectMake(0.0,748.0,1024.0,85.0);
+        
+        ldcFavoritesViewObj.frame=CGRectMake(0.0,748.0,1024.0,437.0);
+        
+        
+        // toolBarView.alpha=0.5;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        
+        toolBarView.frame=CGRectMake(0.0,227.0,1024.0,85.0);
+        toolBarView.alpha = 1;
+        [UIView commitAnimations];
+        
+        //   eventListViewObj.alpha=0.5;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelegate:self];
+        
+         bottomViewBackground.frame = bottomViewFrameVisibleMode;
+        ldcFavoritesViewObj.frame=CGRectMake(0, 311, 1024, 437);
+        ldcFavoritesViewObj.alpha = 1;
+        [UIView commitAnimations];
+    }
+}
+
+// Changes made by sanat
+
+-(void)memberDetailButtonAction:(id)sender
+{
+    
+    
+   // if (!memberBioViewListObj) {
+        
+        memberBioViewListObj=[[MemberBioViewList alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+  //  }
+   
+    
+    [memberBioViewListObj setDelegate:self];        //Added By Umesh
+    [memberBioViewListObj setSelectorToHideUnhideToolBarView:@selector(hideUnhideToolBarView:)];
+   
+    
+
+    MemberBioView *MemberBioViewObj1=[[MemberBioView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    MemberBioView *MemberBioViewObj2=[[MemberBioView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+   
+    NSDictionary *dictionary=(NSMutableDictionary*)sender;
+    
+    MemberBioViewObj1.Status=YES;
+    MemberBioViewObj2.Status=YES;
+
+    NSArray *memberListArray=[dictionary valueForKey:@"Array"];
+    
+    MemberBioViewObj1.arraySave=memberListArray;
+    MemberBioViewObj2.arraySave=memberListArray;
+
+
+    
+    UIButton *buttonTag=[dictionary valueForKey:@"membertag"];
+    
+    int selectIndex=buttonTag.tag;
+
+    int widthCount=[memberListArray count];
+
+    MemberBioViewObj1.closeButton.hidden=TRUE;
+    MemberBioViewObj2.closeButton.hidden=TRUE;
+
+    MemberBioViewObj1.delegate=memberBioViewListObj;
+    [MemberBioViewObj1 setSelectorLeftArrowAction:@selector(leftArrowAction:)];
+    [MemberBioViewObj1 setSelectorRightArrowAction:@selector(rightArrowAction:)];
+    [MemberBioViewObj1 setSelectorScrolling:@selector(scrollingEnable:)];
+    [MemberBioViewObj1 setSelectorEmailAction:@selector(emailAction:)];     //Added By Umesh
+    [MemberBioViewObj1 setSelectorToHideOrShowBottomBar:@selector(hideUnhdieBottomBar:)];       //Added By Umesh
+
+    MemberBioViewObj2.delegate=memberBioViewListObj;
+    [MemberBioViewObj2 setSelectorLeftArrowAction:@selector(leftArrowAction:)];
+    [MemberBioViewObj2 setSelectorRightArrowAction:@selector(rightArrowAction:)];
+    [MemberBioViewObj2 setSelectorScrolling:@selector(scrollingEnable:)];
+    [MemberBioViewObj2 setSelectorEmailAction:@selector(emailAction:)];     //Added By Umesh
+    [MemberBioViewObj2 setSelectorToHideOrShowBottomBar:@selector(hideUnhdieBottomBar:)];       //Added By Umesh
+
+//    memberBioViewListObj.currentPage=MemberBioViewObj1;
+//    memberBioViewListObj.nextPage=MemberBioViewObj2;
+    
+    memberBioViewListObj.memberBioViewListScrollView.contentSize =CGSizeMake(
+                                                                             memberBioViewListObj.memberBioViewListScrollView.frame.size.width * widthCount,
+                                                                             memberBioViewListObj.memberBioViewListScrollView.frame.size.height);
+	
+     memberBioViewListObj.memberBioViewListScrollView.contentOffset = CGPointMake(0, 0);
+    
+    
+    
+    
+    [memberBioViewListObj.memberBioViewListScrollView addSubview:MemberBioViewObj1];
+    
+  //  [memberBioViewListObj.memberBioViewListScrollView addSubview:MemberBioViewObj2];
+    
+    [memberBioViewListObj applyNewIndex:selectIndex totalCount:widthCount  pageController:MemberBioViewObj1];
+    
+    memberBioViewListObj.pageCount=[memberListArray count]-1;
+    
+    memberBioViewListObj.currentPage=MemberBioViewObj1;
+    memberBioViewListObj.nextPage=MemberBioViewObj2;
+    
+    if (selectIndex+1 <[memberListArray count]) {
+        
+
+        [memberBioViewListObj.memberBioViewListScrollView addSubview:MemberBioViewObj2];
+        
+        [memberBioViewListObj applyNewIndex:selectIndex+1 totalCount:widthCount pageController:MemberBioViewObj2];
+        
+        
+    }
+    else if (selectIndex-1 >=0)
+    {
+        
+        [memberBioViewListObj.memberBioViewListScrollView addSubview:MemberBioViewObj2];
+        
+        [memberBioViewListObj applyNewIndex:selectIndex-1 totalCount:widthCount pageController:MemberBioViewObj2];
+        
+    }
+    
+    CGRect frame = memberBioViewListObj.memberBioViewListScrollView.frame;
+    frame.origin.x = frame.size.width *selectIndex;
+    frame.origin.y = 0;
+    //
+    [memberBioViewListObj.memberBioViewListScrollView scrollRectToVisible:frame animated:NO];
+
+    
+//    [memberBioViewListObj applyNewIndex:0 totalCount:widthCount pageController:MemberBioViewObj1];
+//    [memberBioViewListObj applyNewIndex:1 totalCount:widthCount pageController:MemberBioViewObj2];
+    
+//    toolBarView.frame=CGRectMake(0,663, 1024, 85);
+    
+    //    [homeViewObj removeFromSuperview];
+    //    [settingViewObj removeFromSuperview];
+    //    [aboutLdcViewObj removeFromSuperview];
+    //    [memberCatalogViewObj removeFromSuperview];
+    //    [eventListViewObj removeFromSuperview];
+
+    toolBarView.frame=CGRectMake(0,663, 1024, 85);
+   
+    [self.view addSubview:memberBioViewListObj];
+    [self.view addSubview:toolBarView];
+
+    [self fadeView:memberBioViewListObj fadein:YES timeAnimation:0.3];
+
+}
+
+-(void)eventDetailButtonAction:(id)sender
+{
+  //  if (!eventViewObj) {
+       
+        eventViewObj=[[EventView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+ //   }
+    
+    if (!eventMainViewObj) {
+        
+        eventMainViewObj=[[EventMainView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    }
+    [eventMainViewObj setDelegate:self];        //Added By Umesh
+    [eventMainViewObj setSelectorToHideUnhideToolBarView:@selector(hideUnhideToolBarView:)];
+    
+    
+    EventView *eventViewObj1=[[EventView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+    EventView *eventViewObj2=[[EventView alloc]initWithFrame:CGRectMake(0, 0, 1024, 748)];
+
+    eventViewObj1.delegate=eventMainViewObj;
+    [eventViewObj1 setSelectorLeftEventAction:@selector(leftArrowAction:)];
+    [eventViewObj1 setSelectorRightEventAction:@selector(rightArrowAction:)];
+    [eventViewObj1 setSelectorScrollingEnable:@selector(scrollingEnable:)];
+    [eventViewObj1 setSelectorToHideOrShowBottomBar:@selector(hideUnhdieBottomBar:)];       //Added By Umesh
+    
+    eventViewObj2.delegate=eventMainViewObj;
+    [eventViewObj2 setSelectorLeftEventAction:@selector(leftArrowAction:)];
+    [eventViewObj2 setSelectorRightEventAction:@selector(rightArrowAction:)];
+    [eventViewObj2 setSelectorScrollingEnable:@selector(scrollingEnable:)];
+    [eventViewObj2 setSelectorToHideOrShowBottomBar:@selector(hideUnhdieBottomBar:)];       //Added By Umesh
+
+    NSDictionary *dictionary=(NSMutableDictionary*)sender;
+    
+    NSArray *eventListArray=[dictionary valueForKey:@"Array"];
+    
+    UIButton *eventButton=(UIButton*)[dictionary valueForKey:@"EventTag"];
+    
+    int widthCount=[eventListArray count];
+
+    int selectedIndex=eventButton.tag;
+    
+    eventViewObj1.arraySave=eventListArray;
+    eventViewObj2.arraySave=eventListArray;
+    
+    eventMainViewObj.currentPage=eventViewObj1;
+    eventMainViewObj.nextPage=eventViewObj2;
+
+    eventMainViewObj.eventMainViewScrollView.contentSize =CGSizeMake(
+               eventMainViewObj.eventMainViewScrollView.frame.size.width * widthCount,
+               eventMainViewObj.eventMainViewScrollView.frame.size.height);
+	
+    eventMainViewObj.eventMainViewScrollView.contentOffset = CGPointMake(0, 0);
+
+    [eventMainViewObj.eventMainViewScrollView addSubview:eventViewObj1];    
+    
+    [eventMainViewObj applyNewIndex:selectedIndex totalCount:widthCount pageController:eventViewObj1];
+
+    eventMainViewObj.pageCount=[eventListArray count]-1;
+    
+    if (selectedIndex+1 <[eventListArray count]) {
+        
+        [eventMainViewObj.eventMainViewScrollView addSubview:eventViewObj2];
+        
+        [eventMainViewObj applyNewIndex:selectedIndex+1 totalCount:widthCount pageController:eventViewObj2];
+        
+    }
+    else if (selectedIndex-1 >=0)
+    {
+               
+        [eventMainViewObj.eventMainViewScrollView addSubview:eventViewObj2];
+        
+        [eventMainViewObj applyNewIndex:selectedIndex-1 totalCount:widthCount pageController:eventViewObj2];
+        
+    }
+    
+    CGRect frame = eventMainViewObj.eventMainViewScrollView.frame;
+    frame.origin.x = frame.size.width *selectedIndex;
+    frame.origin.y = 0;
+    
+    [eventMainViewObj.eventMainViewScrollView scrollRectToVisible:frame animated:NO];
+
+    toolBarView.frame=CGRectMake(0,663, 1024, 85);
+    
+    [self.view addSubview:eventMainViewObj];
+    [self.view addSubview:toolBarView];
+
+    [self fadeView:eventMainViewObj fadein:YES timeAnimation:0.3];
+
+}
+
+
+-(void)favoritesDetailButtonAction:(id)sender
+{
+   FavoriteView *favoriteViewObj=(FavoriteView*)sender;
+
+  // if (!inAppBrowserObj) {
+
+      inAppBrowserObj=[[InAppBrowser alloc]initWithFrame:CGRectMake(0, 0, 1024, 768)];
+  // }
+
+    inAppBrowserObj.titleLabel.text=favoriteViewObj.titleString;
+    
+    [inAppBrowserObj loadWebRequest];
+    
+    [self.view addSubview:inAppBrowserObj];
+
+   // NSLog(@"favourates=%@",favoriteViewObj.urlString);
+}
+
+// Changes made by sanat
+
+-(void)memberCatalogRegisterViewFrame:(NSString *)string
+{
+    if ([string isEqualToString:@"YES"]) {
+        
+        memberCatalogViewObj.frame=CGRectMake(0,84,1024,437);
+        toolBarView.frame=CGRectMake(0,0,1024,85);
+        
+    }
+    else {
+        
+        memberCatalogViewObj.frame=CGRectMake(0,311,1024,437);
+        toolBarView.frame=CGRectMake(0,227,1024,85);
+        
+    }
+}
+
+-(void)eventViewFrame:(NSString *)string
+{
+    if ([string isEqualToString:@"YES"]) {
+        
+        eventListViewObj.frame=CGRectMake(0, 84, 1024, 437);
+        toolBarView.frame=CGRectMake(0, 0, 1024, 85);
+        
+    }
+    else {
+        
+        eventListViewObj.frame=CGRectMake(0,311, 1024, 437);
+        toolBarView.frame=CGRectMake(0, 227, 1024, 85);
+        
+    }
+}
+
+-(void)favoriteViewFrame:(NSString *)string
+{
+    if ([string isEqualToString:@"YES"]) {
+        
+        ldcFavoritesViewObj.frame=CGRectMake(0, 84, 1024, 437);
+        toolBarView.frame=CGRectMake(0, 0, 1024, 85);
+        
+    }
+    else {
+        
+        ldcFavoritesViewObj.frame=CGRectMake(0,311, 1024, 437);
+        toolBarView.frame=CGRectMake(0, 227, 1024, 85);
+        
+    }
+}
+
+
+#pragma Fade In and fade Out Animation Method
+
+-(void)fadeView:(UIView *)view fadein:(BOOL)fade timeAnimation:(NSTimeInterval)timeAnim
+{
+    if(fade){
+        view.alpha = 0;
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:timeAnim];
+        [UIView setAnimationDelegate:self];
+        view.alpha =1;
+        [UIView commitAnimations];
+    }else {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:timeAnim];
+        [UIView setAnimationDelegate:self];
+        view.alpha = 0;
+        [UIView commitAnimations];
+    }
+    
+}
+#pragma mark fade in/out Toolbarview
+//Added By Umesh on 19 Feb 2013 :  to hide the tool bar view (to show a view, galleryview, in full screen mode)
+-(void)hideToolBarView{
+    [toolBarView setHidden:TRUE];
+//    [self fadeView:toolBarView fadein:FALSE timeAnimation:0.3];
+}
+//Added By Umesh on 19 Feb 2013 :  to show the tool bar view (to show tool bar on exiting full screen mode.)
+-(void)showToolBarView{
+    [toolBarView setHidden:FALSE];
+//    [self fadeView:toolBarView fadein:TRUE timeAnimation:0.3];
+}
+
+-(void)showEmailPopOvew:(NSArray *)emailIDArray{
+    NSLog(@"showEmailPopOvew?>>>>");
+    
+    MFMailComposeViewController *mailComposer = [MFMailComposeViewController new];
+    [mailComposer setToRecipients:emailIDArray];
+    [mailComposer setSubject:@""]; // Use the document file name for the subject
+    
+    mailComposer.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    mailComposer.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    mailComposer.mailComposeDelegate = self; // Set the delegate
+    [self presentViewController:mailComposer animated:YES completion:nil];
+    
+}
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+#ifdef DEBUG
+    if ((result == MFMailComposeResultFailed) && (error != NULL)) NSLog(@"%@", error);
+#endif
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end

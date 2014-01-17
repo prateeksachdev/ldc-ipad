@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>61FB0F79-66A7-4303-B5CC-802FCDB64BE9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LeadersOfDesignCouncil</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9BF4B8B1-DA8E-44FF-AF89-7D4BA6C94452</key>
+		<string>http://team.mobikasa.net:81/svn/LdcCode/Ipad/branches/LDC14feb</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>LeadersOfDesignCouncil.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9BF4B8B1-DA8E-44FF-AF89-7D4BA6C94452</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>9BF4B8B1-DA8E-44FF-AF89-7D4BA6C94452</key>
+		<string>http://team.mobikasa.net:81/svn/LdcCode</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://team.mobikasa.net:81/svn/LdcCode/Ipad/branches/LDC14feb/LeadersOfDesignCouncil.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9BF4B8B1-DA8E-44FF-AF89-7D4BA6C94452</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9BF4B8B1-DA8E-44FF-AF89-7D4BA6C94452</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LDC</string>
+		</dict>
+	</array>
+</dict>
+</plist>

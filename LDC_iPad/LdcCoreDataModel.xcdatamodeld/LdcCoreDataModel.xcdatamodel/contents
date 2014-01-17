@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1810" systemVersion="11G63b" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AbotLdcImageGallery" representedClassName="AbotLdcImageGallery" syncable="YES">
+        <attribute name="aboutImageSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="aboutRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imagePosition" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageThumb" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="AboutLdcInfo" representedClassName="AboutLdcInfo" syncable="YES">
+        <attribute name="aboutDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="aboutInfoSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="aboutRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebook" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="houzz" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="photoCredits" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="pinterest" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="statusMessage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="telephone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="AboutLdcNewsLetter" representedClassName="AboutLdcNewsLetter" syncable="YES">
+        <attribute name="aboutLdcRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="aboutNewsLetterSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="month" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="newsletterId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="newsletterName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="newsLetterThumb" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="AppsPassword" representedClassName="AppsPassword" syncable="YES">
+        <attribute name="appsId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateAdded" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Contitent" representedClassName="Contitent" syncable="YES">
+        <attribute name="continentsSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contitentId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contitentName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="continentCountry" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Country" inverseName="countryContinent" inverseEntity="Country" syncable="YES"/>
+        <relationship name="continentState" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="State" inverseName="stateContinent" inverseEntity="State" syncable="YES"/>
+    </entity>
+    <entity name="Country" representedClassName="Country" syncable="YES">
+        <attribute name="contitentId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countrySyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="countryContinent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Contitent" inverseName="continentCountry" inverseEntity="Contitent" syncable="YES"/>
+        <relationship name="countryState" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="State" inverseName="stateCountry" inverseEntity="State" syncable="YES"/>
+    </entity>
+    <entity name="EmailLinks" representedClassName="EmailLinks" syncable="YES">
+        <attribute name="accessId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EventAgenda" representedClassName="EventAgenda" syncable="YES">
+        <attribute name="eaAgendaName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaDescription1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaDescription2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaEventAgendaSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaEventID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eaLocation" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Events" representedClassName="Events" syncable="YES">
+        <attribute name="eComment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eFromDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="eGallery" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="eId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eLat" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eLong" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eLongName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ePlace" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ePlace2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ePlace3" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eThumbImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eToDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="eZipCode" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EventsGallery" representedClassName="EventsGallery" syncable="YES">
+        <attribute name="egCaption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="egEventID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="egEventImageSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="egImageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="egImageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="egImagePosition" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="egImageThumb" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="FavCategory" representedClassName="FavCategory" syncable="YES">
+        <attribute name="categoryId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categorySynchDate" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="catagoryFav" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Favorites" inverseName="favCategory" inverseEntity="Favorites" syncable="YES"/>
+    </entity>
+    <entity name="Favorites" representedClassName="Favorites" syncable="YES">
+        <attribute name="catagoryName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="categoryId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favdescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favoriteId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favoritesSynchDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favSubTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="favThumbImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="favCategory" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="FavCategory" inverseName="catagoryFav" inverseEntity="FavCategory" syncable="YES"/>
+    </entity>
+    <entity name="HomeGallery" representedClassName="HomeGallery" syncable="YES">
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageThumb" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MembersGallery" representedClassName="MembersGallery" syncable="YES">
+        <attribute name="mgCaption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgImageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgImagePath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgImagePosition" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="mgImageThumb" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgMemberImageGalleryStateSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgMembersId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mgRS" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Memebers" representedClassName="Memebers" syncable="YES">
+        <attribute name="mAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mAppUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mAppURliphone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mCompany" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mContinentId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mCountryId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mEmail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mFacebook" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mFounder" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mGallery" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="mHouzz" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mLastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mPinterest" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mProfession" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mProfessionId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mProfileImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mStateId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mTelephone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mThumbImage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mTwitter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mWebsite" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Profession" representedClassName="Profession" syncable="YES">
+        <attribute name="professionId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="professionName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="professionRS" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="professionSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Sponsor" representedClassName="Sponsor" syncable="YES">
+        <attribute name="sDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sImageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sponsorId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sThumbImageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sUrl" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="State" representedClassName="State" syncable="YES">
+        <attribute name="contitentId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateSyncDateTime" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="stateContinent" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Contitent" inverseName="continentState" inverseEntity="Contitent" syncable="YES"/>
+        <relationship name="stateCountry" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Country" inverseName="countryState" inverseEntity="Country" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AbotLdcImageGallery" positionX="-128" positionY="27" width="128" height="150"/>
+        <element name="AboutLdcInfo" positionX="-405" positionY="216" width="117" height="255"/>
+        <element name="AboutLdcNewsLetter" positionX="-362" positionY="18" width="128" height="150"/>
+        <element name="AppsPassword" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="Contitent" positionX="81" positionY="72" width="128" height="120"/>
+        <element name="Country" positionX="-342" positionY="-126" width="128" height="135"/>
+        <element name="EmailLinks" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="EventAgenda" positionX="72" positionY="-126" width="128" height="165"/>
+        <element name="Events" positionX="198" positionY="396" width="128" height="285"/>
+        <element name="EventsGallery" positionX="-245" positionY="243" width="128" height="150"/>
+        <element name="FavCategory" positionX="241" positionY="189" width="128" height="120"/>
+        <element name="Favorites" positionX="54" positionY="216" width="128" height="240"/>
+        <element name="HomeGallery" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="MembersGallery" positionX="-90" positionY="252" width="128" height="165"/>
+        <element name="Memebers" positionX="-72" positionY="237" width="128" height="435"/>
+        <element name="Profession" positionX="268" positionY="-99" width="128" height="105"/>
+        <element name="State" positionX="-126" positionY="-126" width="128" height="150"/>
+        <element name="Sponsor" positionX="160" positionY="192" width="128" height="120"/>
+    </elements>
+</model>
